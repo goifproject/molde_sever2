@@ -1,0 +1,6 @@
+# Ignore Directory
+config/
+db_config/
+node_modules/
+
+# Ignore File
