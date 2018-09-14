@@ -34,6 +34,19 @@ module.exports = function (router) {
         })
     });
 
+    // 댓글 삭제 (admin)
+    router.delete("/commentadmin", function (req, res, next) {
+        let comm_id = req.body.commentId;
+        Comment.removeCommentForAdmin(comm_id, function (err, comments) {
+            if (err) {
+                console.log(err);
+                res.status(200).send({result:0});
+            } else {
+                res.status(200).send({result:1});
+            }
+        })
+    });
+
     // 댓글 신고
     router.put("/comment", function (req, res, next) {
         let user_id = req.body.commentUserId;
@@ -58,6 +71,20 @@ module.exports = function (router) {
         let page = req.query.page != undefined ? Number(req.query.page) : -1;
         let per_page = req.query.perPage != undefined ? Number(req.query.perPage) : -1;
         Comment.getCommentsNews(news_id, per_page, page, function (err, comments) {
+            if (err){
+                console.log(err);
+                res.status(200).send({result:0});
+            }
+            else {
+                res.json({data:comments});
+            }
+        })
+    });
+
+    // 댓글 가져오기 by comm_id
+    router.get("/commenti", function (req, res, next) {
+        let comm_id = req.query.commentId;
+        Comment.getCommentsID(comm_id, function (err, comments) {
             if (err){
                 console.log(err);
                 res.status(200).send({result:0});

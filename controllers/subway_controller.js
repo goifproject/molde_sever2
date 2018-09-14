@@ -1,14 +1,14 @@
-let Safehouse = require("../models/safehouseSchema");
+let Subway = require("../models/subwaySchema");
 
 module.exports = function (router) {
-    router.get("/safehouse", function (req, res, next) {
-        let safe_lat = Number(req.query.safeLat);
-        let safe_lon = Number(req.query.safeLng);
+    router.get("/subway", function (req, res, next) {
+        let user_lat = Number(req.query.userLat);
+        let user_lon = Number(req.query.userLng);
 
         let page = req.query.page != undefined ? Number(req.query.page) : -1;
         let per_page = req.query.perPage != undefined ? Number(req.query.perPage) : -1;
 
-        Safehouse.getSafehouse(safe_lat, safe_lon, per_page, page, function (err, data) {
+        Subway.getSubwayInfo(user_lat, user_lon, per_page, page, function (err, data) {
             if (err) {
                 console.log(err);
                 res.status(200).send({result:0});

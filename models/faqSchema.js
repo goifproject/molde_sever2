@@ -41,14 +41,17 @@ faqSchema.statics.insertFaqData = function (user_id, user_name, faq_contents, fa
     });
 };
 
-faqSchema.statics.getFaqs = function(callback){
+faqSchema.statics.getFaqs = function(per_page, page, callback){
     FaQ.collection.find({
     }, {projection: {"_id": 0, "faq_id": 1, "user_id": 1,
         "user_name": 1, "faq_contents": 1, "faq_email": 1 }},
-    function (err, comments) {
+    function (err, faqs) {
         if (err) callback(err);
         else {
-            comments.toArray(function(err,docs){callback(null, docs)});
+            if(per_page != -1 && page != -1)
+                faqs.sort({'faq_id':1}).skip(page*per_page).limit(per_page).toArray(function(err,docs){callback(null, docs)});
+            else
+                faqs.toArray(function(err,docs){callback(null, docs)});
         }
     });
 };

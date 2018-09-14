@@ -59,6 +59,17 @@ commSchema.statics.removeComment = function(user_id, comm_id, callback){
     });
 };
 
+commSchema.statics.removeCommentForAdmin = function(comm_id, callback){
+    Comment.collection.findOneAndDelete({
+        comm_id: Number(comm_id)
+    },function(err, result){
+        if(err) callback(err);
+        else{
+            callback(null, result);
+        }
+    });
+};
+
 commSchema.statics.reportComment = function(user_id, comm_id, callback){
     CommReport.isCommReportExist(user_id, comm_id, function(exist){
         if(exist == 1){
@@ -107,6 +118,19 @@ commSchema.statics.getCommentsUser = function(user_id, per_page, page, callback)
                 comments.sort({'comm_id':1}).skip(page*per_page).limit(per_page).toArray(function(err,docs){callback(null, docs)});
             else
                 comments.toArray(function(err,docs){callback(null, docs)});
+        }
+    });
+};
+
+commSchema.statics.getCommentsID = function(comm_id, callback){
+    Comment.collection.find({
+        comm_id: Number(comm_id)
+    }, {projection: {"_id": 0, "comm_id": 1, "user_id": 1,
+        "user_name": 1, "news_id": 1, "comment": 1, "comm_date": 1 }},
+    function (err, comments) {
+        if (err) callback(err);
+        else {
+            comments.toArray(function(err,docs){callback(null, docs)});
         }
     });
 };

@@ -59,6 +59,21 @@ commReportSchema.statics.isCommReportExist = function(user_id, comm_id, callback
     });
 };
 
+commReportSchema.statics.getCommentReports = function(per_page, page, callback){
+    CommentReport.collection.find({
+    }, {projection: {"_id": 0, "comm_rep_id": 1, "comm_id": 1,
+                "user_id": 1, "comm_rep_date": 1 }},
+    function (err, reps) {
+        if (err) callback(err);
+        else {
+            if(per_page != -1 && page != -1)
+                reps.sort({'comm_rep_date':1}).skip(page*per_page).limit(per_page).toArray(function(err,docs){callback(null, docs)});
+            else
+                reps.toArray(function(err,docs){callback(null, docs)});
+        }
+    });
+};
+
 
 var CommentReport = mongoose.model("Commreport", commReportSchema);
 

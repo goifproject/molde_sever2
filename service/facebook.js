@@ -1,3 +1,4 @@
+let fs = require("fs");
 var FB = require('fb');
 var moment = require('moment');
 let News = require('../models/newsSchema');

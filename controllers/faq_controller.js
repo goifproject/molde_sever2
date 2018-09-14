@@ -18,7 +18,10 @@ module.exports = function (router) {
     })
 
     router.get("/faq", function (req, res, next) {
-        Faq.getFaqs(function (err, comments) {
+        let page = req.query.page != undefined ? Number(req.query.page) : -1;
+        let per_page = req.query.perPage != undefined ? Number(req.query.perPage) : -1;
+
+        Faq.getFaqs(per_page, page, function (err, comments) {
             if (err) {
                 console.log(err);
                 res.status(200).send({result:0});

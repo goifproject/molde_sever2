@@ -4,3 +4,4 @@ db_config/
 node_modules/
 
 # Ignore File
+subway.csv
