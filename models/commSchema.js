@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 var mongoose = require("mongoose");
 var Counter = require('./counterSchema');
 var CommReport = require('./commReportSchema');
@@ -19,7 +20,7 @@ function getNextId(name,cb){
         {$inc: {seq: 1}},
         {projection: {"_id": 0, "seq": 1 }},
         function(err, result){
-            if(err) console.log(new Error(err));
+            if(err) logger.info(new Error(err));
             else{
                 cb(result.seq);
             }
@@ -80,7 +81,7 @@ commSchema.statics.reportComment = function(user_id, comm_id, callback){
                 {$inc: {comm_rep: 1}},
                 {projection: {"_id": 0, "comm_id": 1, "comm_rep": 1}},
                 function(err, result){
-                    if(err) console.log(new Error(err));
+                    if(err) logger.info(new Error(err));
                     else{
                         CommReport.addCommentReport(user_id, comm_id, callback);
                     }

@@ -29,6 +29,8 @@
     "request": "^2.85.0",
     "serve-favicon": "^2.4.5",
     "sharp": "^0.20.2",
-    "thumbnail": "^0.1.9"
+    "thumbnail": "^0.1.9",
+    "winston": "^3.1.0",
+    "winston-daily-rotate-file": "^3.3.3"
   }
 }

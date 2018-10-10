@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 var FCM = require('fcm-push');
 let fs = require("fs");
 var admin = require("firebase-admin");
@@ -17,7 +18,7 @@ var users_collection = db.collection('users');
 
 // query.get().then(querySnapshot => {
 //     querySnapshot.forEach(documentSnapshot => {
-//         console.log(documentSnapshot.data().token);
+//         logger.info(documentSnapshot.data().token);
 //     });
 // });
 
@@ -27,16 +28,18 @@ var serverKey = firebase.serverKey;
 
 var fcm = new FCM(serverKey);
 
-exports.sendNewReportPush = function(uid) {
-//    console.log('(new push)push to '+uid);
+exports.sendNewReportPush = function(uid, rep_id) {
+   logger.info('(new push)push to '+uid);
     var query =  users_collection.where('uId', '==', uid);
     query.get().then(querySnapshot => {
         querySnapshot.forEach(documentSnapshot => {
+            logger.info("token : " + documentSnapshot.data().token);
             var message = {
                 to: documentSnapshot.data().token,
                 // collapse_key: 'your_collapse_key', 
                 data: {
-                    status: 'new'
+                    type: 1,
+                    feedId: rep_id
                 },
                 notification: {
                     title: '새 피드 등록',
@@ -49,25 +52,27 @@ exports.sendNewReportPush = function(uid) {
         
             fcm.send(message, function(err, response){
                 if (err) {
-                    console.log("Something has gone wrong!");
+                    logger.info("Something has gone wrong!");
                 } else {
-                    console.log("Successfully sent with response: ", response);
+                    logger.info("Successfully sent with response: ", response);
                 }
             });
         }); 
     });
 };
 
-exports.sendStateChangePush = function(uid) {
-//    console.log('(state change)push to '+uid);
+exports.sendStateChangePush = function(uid, rep_id) {
+    logger.info('(state change)push to '+uid);
     var query =  users_collection.where('uId', '==', uid);
     query.get().then(querySnapshot => {
         querySnapshot.forEach(documentSnapshot => {
+            logger.info("token : " + documentSnapshot.data().token);
             var message = {
                 to: documentSnapshot.data().token,
                 // collapse_key: 'your_collapse_key', 
                 data: {
-                    status: 'new'
+                    type: 1,
+                    feedId: rep_id
                 },
                 notification: {
                     title: '피드 상태 변화',
@@ -80,9 +85,9 @@ exports.sendStateChangePush = function(uid) {
         
             fcm.send(message, function(err, response){
                 if (err) {
-                    console.log("Something has gone wrong!");
+                    logger.info("Something has gone wrong!");
                 } else {
-                    console.log("Successfully sent with response: ", response);
+                    logger.info("Successfully sent with response: ", response);
                 }
             });
         }); 

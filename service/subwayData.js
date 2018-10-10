@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 var csv = require('node-csv').createParser();
 var mongoose = require("mongoose");
 var Counter = require('../models/counterSchema');
@@ -9,7 +10,7 @@ function getNextId(name,cb){
         {$inc: {seq: 1}},
         {projection: {"_id": 0, "seq": 1 }},
         function(err, result){
-            if(err) console.log(new Error(err));
+            if(err) logger.info(new Error(err));
             else{
                 cb(result.seq);
             }
@@ -38,8 +39,8 @@ exports.addToDatabase = function(){
                     subway_lat: Number(item[3]),
                     subway_lon: Number(item[4]),
                 },function(err, result){
-                    if(err) console.log(err);
-                    else console.log(index, item[0], "done");
+                    if(err) logger.info(err);
+                    else logger.info(index, item[0], "done");
                 })
             })
         });

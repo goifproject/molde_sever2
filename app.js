@@ -3,10 +3,12 @@ var mongoose = require("mongoose");
 let fs = require("fs");
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+// var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var http = require("http");
+
+var logger = require('./service/logger');
 
 // var Safehouse = require("./service/csvToDatabase");
 // var Subway = require('./service/subwayData');
@@ -40,9 +42,9 @@ var dbUrl = dbConfig.dbUrl;
 var MongoClient = require("mongodb").MongoClient;
 var promise = mongoose.connect(dbUrl, {
     }, function (mongoError) {
-        if (mongoError) console.log(new Error("DB연결 에러"));
+        if (mongoError) logger.info(new Error("DB연결 에러"));
         else {
-            console.log("DB 연결 성공");
+            logger.info("DB 연결 성공");
         }
     }
 );
@@ -60,7 +62,7 @@ app.set('view engine', 'ejs');
 app.set('port', port);
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+// app.use(logger('dev'));
 //app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -100,7 +102,7 @@ app.use(function (err, req, res, next) {
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function () {
-    console.log("서버 연동 완료");
+    logger.info("서버 연동 완료");
 });
 
 module.exports = app;

@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 let fs = require("fs");
 var FB = require('fb');
 var moment = require('moment');
@@ -12,7 +13,7 @@ FB.setAccessToken(pageToken);
 exports.getFacebookPosts = function(){
     FB.api('2000008220011384/posts?fields=attachments,created_time', function (res) {
         if(!res || res.error) {
-            console.log(!res ? 'error occurred' : res.error);
+            logger.info(!res ? 'error occurred' : res.error);
             return;
         }
 

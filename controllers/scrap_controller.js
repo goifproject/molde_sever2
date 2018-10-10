@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 let Scrap = require("../models/scrapSchema");
 let bodyParser = require("body-parser");
 
@@ -10,7 +11,7 @@ module.exports = function (router) {
         let news_id = req.body.cardNewsId;
         Scrap.addScrap(user_id, news_id, function (err, result) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             } else {
                 res.status(200).send({result: 1});
@@ -24,7 +25,7 @@ module.exports = function (router) {
         let scrap_id = req.body.cardNewsScrapId;
         Scrap.removeScrap(user_id, scrap_id, function (err, result) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             } else {
                 res.status(200).send({result: 1});
@@ -39,7 +40,7 @@ module.exports = function (router) {
         let per_page = req.query.perPage != undefined ? Number(req.query.perPage) : -1;
         Scrap.getScraps(user_id, per_page, page, function (err, scraps) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else {
@@ -54,7 +55,7 @@ module.exports = function (router) {
         let news_id = Number(req.query.cardNewsId);
         Scrap.isScrapExist(user_id, news_id, function (err, scraps) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 //res.status(200).send({result:0});
             }
             else {

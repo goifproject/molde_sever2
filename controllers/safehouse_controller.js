@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 let Safehouse = require("../models/safehouseSchema");
 
 module.exports = function (router) {
@@ -10,7 +11,7 @@ module.exports = function (router) {
 
         Safehouse.getSafehouse(safe_lat, safe_lon, per_page, page, function (err, data) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else {

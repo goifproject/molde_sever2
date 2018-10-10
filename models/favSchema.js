@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 var mongoose = require("mongoose");
 var Counter = require('./counterSchema');
 var Schema = mongoose.Schema;
@@ -17,7 +18,7 @@ function getNextId(name,cb){
         {$inc: {seq: 1}},
         {projection: {"_id": 0, "seq": 1 }},
         function(err, result){
-            if(err) console.log(new Error(err));
+            if(err) logger.info(new Error(err));
             else{
                 cb(result.seq);
             }
@@ -70,6 +71,21 @@ favSchema.statics.getFavorites = function(user_id, per_page, page, callback){
         }
     });
 };
+
+favSchema.statics.getFavoritesByDistance = function (user_id, user_lat, user_lon, callback) {
+    Favorite.collection.find({
+        user_id: user_id,
+        fav_lat: {$gte : Number(user_lat)-0.013, $lte : Number(user_lat)+0.013},
+        fav_lon: {$gte : Number(user_lon)-0.016, $lte : Number(user_lon)+0.016},
+    }, {projection: {"_id": 0, fav_lat: 1, fav_lon:1, fav_name:1, fav_addr:1, user_id:1, fav_id:1 }},
+    function (error, favs) {
+            if (error) callback(error);
+            else {
+                favs.toArray(function(err,fav){callback(null, fav)});
+            }
+        }
+    );
+}
 
 var Favorite = mongoose.model("Favorite",favSchema);
 

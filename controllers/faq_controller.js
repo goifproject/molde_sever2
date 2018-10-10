@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 let Faq = require("../models/faqSchema");
 
 module.exports = function (router) {
@@ -9,7 +10,7 @@ module.exports = function (router) {
 
         Faq.insertFaqData(user_id, user_name, contents, email, function (error, faq) {
             if (error) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             } else {
                 res.status(200).send({result:1});
@@ -23,7 +24,7 @@ module.exports = function (router) {
 
         Faq.getFaqs(per_page, page, function (err, comments) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else {

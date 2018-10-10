@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 let Comment = require("../models/commSchema");
 let bodyParser = require("body-parser");
 
@@ -12,7 +13,7 @@ module.exports = function (router) {
         let content = req.body.commentContent;
         Comment.addComment(user_id, user_name, news_id, content, function (err, result) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             } else {
                 res.status(200).send({result:1});
@@ -26,7 +27,7 @@ module.exports = function (router) {
         let comm_id = req.body.commentId;
         Comment.removeComment(user_id, comm_id, function (err, comments) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             } else {
                 res.status(200).send({result:1});
@@ -39,7 +40,7 @@ module.exports = function (router) {
         let comm_id = req.body.commentId;
         Comment.removeCommentForAdmin(comm_id, function (err, comments) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             } else {
                 res.status(200).send({result:1});
@@ -53,7 +54,7 @@ module.exports = function (router) {
         let comm_id = req.body.commentId;
         Comment.reportComment(user_id, comm_id, function (err, result) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             } else {
                 if(result == 1){
@@ -72,7 +73,7 @@ module.exports = function (router) {
         let per_page = req.query.perPage != undefined ? Number(req.query.perPage) : -1;
         Comment.getCommentsNews(news_id, per_page, page, function (err, comments) {
             if (err){
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else {
@@ -86,7 +87,7 @@ module.exports = function (router) {
         let comm_id = req.query.commentId;
         Comment.getCommentsID(comm_id, function (err, comments) {
             if (err){
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else {
@@ -102,7 +103,7 @@ module.exports = function (router) {
         let per_page = req.query.perPage != undefined ? Number(req.query.perPage) : -1;
         Comment.getCommentsUser(user_id, per_page, page, function (err, comments) {
             if (err){
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else {

@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 let multer = require('multer');
 let AWS = require("aws-sdk");
 AWS.config.loadFromPath(__dirname + "/../config/awsconfig.json");
@@ -57,7 +58,7 @@ module.exports = function (router) {
 
         Result.insertReportResultFunc(rep_id, img_array, function (err, report) {
             if (err){
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else {
@@ -70,7 +71,7 @@ module.exports = function (router) {
         let rep_id = req.query.reportId;
         Result.showReportResult(rep_id,function (err,result) {
             if(err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else{

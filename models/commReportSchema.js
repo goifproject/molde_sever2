@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 var mongoose = require("mongoose");
 var Counter = require('./counterSchema');
 var Schema = mongoose.Schema;
@@ -15,7 +16,7 @@ function getNextId(name,cb){
         {$inc: {seq: 1}},
         {projection: {"_id": 0, "seq": 1 }},
         function(err, result){
-            if(err) console.log(new Error(err));
+            if(err) logger.info(new Error(err));
             else{
                 cb(result.seq);
             }
@@ -32,7 +33,7 @@ commReportSchema.statics.addCommentReport = function(user_id, comm_id, callback)
             user_id: user_id,
             comm_rep_date: now.getTime(),
         }, function (err, result) {
-            if (err) console.log(err);
+            if (err) logger.info(err);
             else {
                 callback(null, 1);
             }
@@ -46,7 +47,7 @@ commReportSchema.statics.isCommReportExist = function(user_id, comm_id, callback
         comm_id: Number(comm_id)
     }, {projection: {"_id": 0, "comm_rep_id": 1, "user_id": 1, "comm_id": 1 }},
     function (err, comments) {
-        if (err) console.log(err);
+        if (err) logger.info(err);
         else {
             comments.toArray(function(err,docs){
                 if(docs.length != 0){
@@ -70,6 +71,17 @@ commReportSchema.statics.getCommentReports = function(per_page, page, callback){
                 reps.sort({'comm_rep_date':1}).skip(page*per_page).limit(per_page).toArray(function(err,docs){callback(null, docs)});
             else
                 reps.toArray(function(err,docs){callback(null, docs)});
+        }
+    });
+};
+
+commReportSchema.statics.removeCommentReport = function(comm_rep_id, callback){
+    CommentReport.collection.findOneAndDelete({
+        comm_rep_id: Number(comm_rep_id)
+    },function(err, result){
+        if(err) callback(err);
+        else{
+            callback(null, result);
         }
     });
 };

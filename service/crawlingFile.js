@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 let request = require("request");
 
 // 여성 안심 서비스
@@ -43,7 +44,7 @@ module.exports = function(router){
                     detail_addr[elem] = data_arr_by_rn[elem].split(",")[8];
                 }
 
-		console.log("갯수 : " + number_arr.length);
+		logger.info("갯수 : " + number_arr.length);
 
                 for(var i=0;i<number_arr.length;i++){
                     var json_obj = new Object();
@@ -61,16 +62,16 @@ module.exports = function(router){
 		        
                 }
    		for(var i=0;i<sendData.length;i++){
-		    console.log(sendData[i]);
+		    logger.info(sendData[i]);
 		}
 		
-		console.log(sendData.length);
+		logger.info(sendData.length);
 	        let json_feed = { 
 		    feed : sendData
                 }
 		
          //       let jsonData = JSON.stringify(json_feed);
-                console.log(json_feed);
+                logger.info(json_feed);
                 res.status(200).send((json_feed));
             }
         });

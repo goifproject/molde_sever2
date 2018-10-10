@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 let multer = require('multer');
 let AWS = require("aws-sdk");
 AWS.config.loadFromPath(__dirname + "/../config/awsconfig.json");
@@ -108,7 +109,7 @@ module.exports = function (router) {
         let img_filesize = [];
         let img_array = [];
         for (let elem in req.files) {
-            console.log(req.files[elem].location);
+            logger.info(req.files[elem].location);
             img_filename.push(req.files[elem].originalname);
             img_filepath.push(req.files[elem].location);
             img_filesize.push(req.files[elem].size + 'kb');
@@ -125,7 +126,7 @@ module.exports = function (router) {
         Report.uploadPin(repId, repNm, repContents, img_array, function (err, report) {
             if (err) console.error(err);
             else {
-                console.log("저장 완료");
+                logger.info("저장 완료");
             }
         });
         res.json(req.files);

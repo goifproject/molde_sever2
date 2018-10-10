@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 let mongoose = require("mongoose");
 var Counter = require('./counterSchema');
 let Schema = mongoose.Schema;
@@ -16,7 +17,7 @@ function getNextId(name,cb){
         {$inc: {seq: 1}},
         {projection: {"_id": 0, "seq": 1 }},
         function(err, result){
-            if(err) console.log(new Error(err));
+            if(err) logger.info(new Error(err));
             else{
                 cb(result.seq);
             }

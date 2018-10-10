@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 let multer = require('multer');
 let AWS = require("aws-sdk");
 AWS.config.loadFromPath(__dirname + "/../config/awsconfig.json");
@@ -67,7 +68,7 @@ module.exports = function (router) {
         let img_filesize = [];
         let img_array = [];
         for (let elem in req.files) {
-            console.log(req.files[elem].location);
+            logger.info(req.files[elem].location);
             img_filename.push(req.files[elem].originalname);
             img_filepath.push(req.files[elem].location);
             img_filesize.push(req.files[elem].size + 'kb');
@@ -83,7 +84,7 @@ module.exports = function (router) {
 
         Report.insertReportFunc(user_name, user_email, rep_contents, rep_lat, rep_lon, rep_addr, rep_detail_addr, rep_state, user_id, img_array, function (err, report) {
             if (err){
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else {
@@ -99,7 +100,7 @@ module.exports = function (router) {
 
         Report.updateRptMarker(rep_id, rep_state, function (err, result) {
             if (err){
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else {
@@ -114,7 +115,7 @@ module.exports = function (router) {
         let rep_id = req.body.reportId;
         Report.removeReport(user_id, rep_id, function (err, result) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             } else {
                 res.status(200).send({result: 1});
@@ -128,7 +129,7 @@ module.exports = function (router) {
         let rep_lon = req.query.reportLng;
         Report.showRptSpot(rep_lat,rep_lon,function (err,report) {
             if(err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else{
@@ -144,7 +145,7 @@ module.exports = function (router) {
         let user_id = req.query.userId;
         Report.showRptSpotByUserID(per_page, page, user_id,function (err,report) {
             if(err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else{
@@ -159,7 +160,7 @@ module.exports = function (router) {
         let per_page = req.query.perPage != undefined ? Number(req.query.perPage) : -1;
         Report.showAllRptSpotByRecent(per_page, page, function (err,report) {
             if(err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else{
@@ -176,7 +177,7 @@ module.exports = function (router) {
         let per_page = req.query.perPage != undefined ? Number(req.query.perPage) : -1;
         Report.showAllRptSpotByDistance(rep_lat, rep_lon, per_page, page, function (err,report) {
             if(err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else{
@@ -190,7 +191,7 @@ module.exports = function (router) {
         let rep_id = Number(req.query.reportId);
         Report.showRptSpotByReportID(rep_id, function (err,report) {
             if(err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             }
             else{

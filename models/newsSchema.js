@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 var mongoose = require("mongoose");
 var Counter = require('./counterSchema');
 var Schema = mongoose.Schema;
@@ -22,7 +23,7 @@ function getNextId(name,cb){
         {$inc: {seq: 1}},
         {projection: {"_id": 0, "seq": 1 }},
         function(err, result){
-            if(err) console.log(new Error(err));
+            if(err) logger.info(new Error(err));
             else{
                 cb(result.seq);
             }
@@ -42,10 +43,10 @@ newsSchema.statics.updateNewsFromFB = function(news){
             news_img: news.news_img
         }, function (err, result) {
             if (err) {
-                console.log(err);
+                logger.info(err);
             }
             else {
-                // console.log(result);
+                // logger.info(result);
             }
         })
     });

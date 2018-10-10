@@ -1,3 +1,4 @@
+const logger = require('../service/logger');
 let User = require("../models/userSchema");
 let bodyParser = require("body-parser");
 
@@ -10,7 +11,7 @@ module.exports = function (router) {
         let user_token = req.body.userToken;
         User.addUser(user_id, user_name, user_token, function (err, result) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 res.status(200).send({result:0});
             } else {
                 res.status(200).send({result:1});
